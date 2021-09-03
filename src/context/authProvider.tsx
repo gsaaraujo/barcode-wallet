@@ -29,16 +29,11 @@ export const AuthProvider = ({ children }: Props) => {
 
   const handleOnAuthStateChanged = (user: FirebaseAuthTypes.User | null) => {
     if (user) {
-      const defaultPhotoUrl =
-        'https://images.unsplash.com/photo-1606385837831-6ea825323564?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=751&q=80';
-
-      const availableUser = {
+      setCurrentUser({
         uid: user.uid,
         name: user.displayName || '',
-        photoUrl: user.photoURL || defaultPhotoUrl,
-      };
-
-      setCurrentUser(availableUser);
+        photoUrl: user.photoURL || '',
+      });
     }
   };
 

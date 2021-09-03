@@ -1,47 +1,94 @@
-import React, { useRef } from 'react';
-import { Animated } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList } from 'react-native';
+
+import Modal from 'react-native-modal';
 
 import { theme } from '../../global/styles/theme';
-import GoogleSvg from '../../assets/images/google-icon.svg';
 
-import {
-  Container,
-  TitleContent,
-  Title,
-  Span,
-  LoginButton,
-  IconWrapper,
-  LoginButtonTitle,
-} from './styles';
+import { useAuth } from '../../hooks/useAuth';
+import { PaymentSlip } from '../../context/userProvider';
+
 import { Spacer } from '../../components/Spacer';
+import { SignOut } from '../../components/SignOut';
+import { ProfileHeader } from '../../components/ProfileHeader';
+import { SeparatorList } from '../../components/SeparatorList';
+import { PaymentSlipItem } from '../../components/PaymentSlipItem';
+
+import { Container, Title, Bold, TotalQuantity } from './styles';
+import { fakeData } from '../../utils/fakeData';
+import { FooterList } from '../../components/FooterList';
 
 export const Home = () => {
-  const { titleColor0, buttonFeedBack } = theme.colors;
-  const increase = useRef(new Animated.Value(1)).current;
+  const [logOutModal, setLogOutModal] = useState(false);
+  const [notPaid, setNotPaid] = useState<PaymentSlip[]>([]);
 
-  Animated.timing(increase, {
-    toValue: 0,
-    duration: 5000,
-    useNativeDriver: true,
-  }).start();
+  const { currentUser } = useAuth();
+
+  const { titleFont100, subtitleFont } = theme.fonts;
+  // const { titleColor100, titleColor0, secondaryDark } = theme.colors;
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    handleGetNotPaid();
+  }, []);
+
+  const handleLogOutModal = () => setLogOutModal(!logOutModal);
+
+  const handleTotalAmount = (): number => {
+    let sum = 0;
+
+    notPaid.forEach(each => {
+      sum += each.value;
+    });
+
+    return sum;
+  };
+
+  const handleGetNotPaid = () => {
+    setNotPaid(fakeData);
+  };
 
   return (
     <Container>
-      <TitleContent>
-        <Title color={titleColor0} size={36}>
-          Your <Span>barcode payments slips</Span> in one place
+      <Spacer height={20} />
+
+      <ProfileHeader
+        title={currentUser?.name}
+        photoUrl={currentUser?.photoUrl}
+        handleLogOutModal={handleLogOutModal}
+      />
+
+      <Modal
+        isVisible={logOutModal}
+        style={{ marginHorizontal: 0, justifyContent: 'flex-end' }}>
+        <SignOut handleLogOutModal={handleLogOutModal} />
+      </Modal>
+
+      <Spacer height={40} />
+
+      <TotalQuantity>
+        <Title font={subtitleFont} size={14} align='center'>
+          You still have <Bold>5 payments slips</Bold> registered to pay
         </Title>
-      </TitleContent>
+      </TotalQuantity>
 
-      <LoginButton android_ripple={{ color: buttonFeedBack }}>
-        <IconWrapper>
-          <GoogleSvg />
-        </IconWrapper>
+      <Spacer height={55} />
 
-        <LoginButtonTitle>Connect with Google</LoginButtonTitle>
-      </LoginButton>
+      <Title font={titleFont100} size={20}>
+        My payments slips
+      </Title>
 
-      <Spacer height={58} />
+      <Spacer height={38} />
+
+      <FlatList
+        data={notPaid}
+        keyExtractor={item => item.uid}
+        renderItem={({ item }) => <PaymentSlipItem data={item} />}
+        ItemSeparatorComponent={() => <SeparatorList />}
+        showsVerticalScrollIndicator={false}
+      />
+
+      <FooterList amount={handleTotalAmount()} />
     </Container>
   );
 };

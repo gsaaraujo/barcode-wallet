@@ -14,6 +14,7 @@ export const theme = {
     secondaryDark: '#EF8F40',
 
     buttonFeedBack: 'rgba(0, 0, 0, 0.2)',
+    buttonFeedBackWhite: 'rgba(225, 225, 225, 0.2)',
   },
 
   fonts: {
