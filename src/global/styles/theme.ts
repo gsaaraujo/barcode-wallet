@@ -10,7 +10,10 @@ export const theme = {
     highlight: '#FFBF6B',
 
     primaryDark: '#1A2133',
+    primaryBlank: '#F8F8F8',
     secondaryDark: '#EF8F40',
+
+    buttonFeedBack: 'rgba(0, 0, 0, 0.2)',
   },
 
   fonts: {

@@ -32,7 +32,8 @@
       }
     ],
     "import/prefer-default-export": "off",
-    "arrow-body-style": ["error", "as-needed"]
+    "arrow-body-style": ["error", "as-needed"],
+    "react/require-default-props": "off"
   },
   "settings": {
     "import/resolver": {
