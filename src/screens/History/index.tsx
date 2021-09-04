@@ -9,28 +9,27 @@ import { useAuth } from '../../hooks/useAuth';
 import { PaymentSlip } from '../../context/userProvider';
 
 import { Spacer } from '../../components/Spacer';
-import { FooterList } from '../../components/FooterList';
-import { SeparatorList } from '../../components/SeparatorList';
 import { ProfileHeader } from '../../components/ProfileHeader';
+import { SeparatorList } from '../../components/SeparatorList';
 import { PaymentSlipItem } from '../../components/PaymentSlipItem';
 
-import { Container, Title, Bold, TotalQuantity, Loading } from './styles';
+import { Container, Title, Loading } from './styles';
+import { FooterList } from '../../components/FooterList';
 
-export const Home = () => {
-  const [notPaid, setNotPaid] = useState<PaymentSlip[]>([]);
+export const History = () => {
+  const [alreadyPaid, setAlreadyPaid] = useState<PaymentSlip[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { currentUser } = useAuth();
-
   const { secondaryDark } = theme.colors;
-  const { titleFont100, subtitleFont } = theme.fonts;
+
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     const subscriber = firestore()
       .collection('Users')
       .onSnapshot(querySnapshot => {
         querySnapshot.forEach(documentSnapshot => {
-          setNotPaid(documentSnapshot.data().notPaid);
+          setAlreadyPaid(documentSnapshot.data().alreadyPaid);
         });
 
         setIsLoading(false);
@@ -42,7 +41,7 @@ export const Home = () => {
   const handleTotalAmount = (): number => {
     let sum = 0;
 
-    notPaid.forEach(each => {
+    alreadyPaid.forEach(each => {
       sum += each.value;
     });
 
@@ -58,20 +57,8 @@ export const Home = () => {
         photoUrl={currentUser?.photoUrl}
       />
 
-      <Spacer height={40} />
-
-      <TotalQuantity>
-        <Title font={subtitleFont} size={14} align='center'>
-          You still have <Bold>5 payments slips</Bold> registered to pay
-        </Title>
-      </TotalQuantity>
-
-      <Spacer height={55} />
-
-      <Title font={titleFont100} size={20}>
-        My payments slips
-      </Title>
-
+      <Spacer height={72} />
+      <Title>Paid ones</Title>
       <Spacer height={38} />
 
       {isLoading ? (
@@ -80,7 +67,7 @@ export const Home = () => {
         </Loading>
       ) : (
         <FlatList
-          data={notPaid}
+          data={alreadyPaid}
           keyExtractor={item => item.uid}
           renderItem={({ item }) => (
             <PaymentSlipItem data={item} disableOptions={false} />

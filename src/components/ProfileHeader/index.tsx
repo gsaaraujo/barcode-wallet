@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+import Modal from 'react-native-modal';
 
 import { theme } from '../../global/styles/theme';
+
+import { SignOut } from '../SignOut';
 
 import {
   Container,
@@ -14,19 +18,18 @@ import {
 type Props = {
   title: string | undefined;
   photoUrl: string | undefined;
-  handleLogOutModal: () => void;
 };
 
-export const ProfileHeader = ({
-  title,
-  photoUrl,
-  handleLogOutModal,
-}: Props) => {
+export const ProfileHeader = ({ title, photoUrl }: Props) => {
+  const [logOutModal, setLogOutModal] = useState(false);
+
   const { subtitleFont } = theme.fonts;
   const { buttonFeedBackWhite } = theme.colors;
 
   const defaultPhotoUrl =
     'https://images.unsplash.com/photo-1606385837831-6ea825323564?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=751&q=80';
+
+  const handleLogOutModal = () => setLogOutModal(!logOutModal);
 
   return (
     <Container>
@@ -47,6 +50,12 @@ export const ProfileHeader = ({
         onPress={handleLogOutModal}>
         <ProfilePhoto source={{ uri: photoUrl || defaultPhotoUrl }} />
       </Wrapper>
+
+      <Modal
+        isVisible={logOutModal}
+        style={{ marginHorizontal: 0, justifyContent: 'flex-end' }}>
+        <SignOut handleLogOutModal={handleLogOutModal} />
+      </Modal>
     </Container>
   );
 };
