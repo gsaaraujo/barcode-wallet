@@ -13,8 +13,8 @@ export const theme = {
     primaryBlank: '#F8F8F8',
     secondaryDark: '#EF8F40',
 
-    buttonFeedBack: 'rgba(0, 0, 0, 0.2)',
-    buttonFeedBackWhite: 'rgba(225, 225, 225, 0.2)',
+    buttonFeedBack: 'rgba(0, 0, 0, 0.27)',
+    buttonFeedBackWhite: 'rgba(225, 225, 225, 0.27)',
   },
 
   fonts: {

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList } from 'react-native';
+import { ActivityIndicator, FlatList } from 'react-native';
+
+import firestore from '@react-native-firebase/firestore';
 
 import Modal from 'react-native-modal';
 
@@ -10,26 +12,35 @@ import { PaymentSlip } from '../../context/userProvider';
 
 import { Spacer } from '../../components/Spacer';
 import { SignOut } from '../../components/SignOut';
-import { ProfileHeader } from '../../components/ProfileHeader';
+import { FooterList } from '../../components/FooterList';
 import { SeparatorList } from '../../components/SeparatorList';
+import { ProfileHeader } from '../../components/ProfileHeader';
 import { PaymentSlipItem } from '../../components/PaymentSlipItem';
 
-import { Container, Title, Bold, TotalQuantity } from './styles';
-import { fakeData } from '../../utils/fakeData';
-import { FooterList } from '../../components/FooterList';
+import { Container, Title, Bold, TotalQuantity, Loading } from './styles';
 
 export const Home = () => {
   const [logOutModal, setLogOutModal] = useState(false);
   const [notPaid, setNotPaid] = useState<PaymentSlip[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { currentUser } = useAuth();
 
+  const { secondaryDark } = theme.colors;
   const { titleFont100, subtitleFont } = theme.fonts;
-  // const { titleColor100, titleColor0, secondaryDark } = theme.colors;
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    handleGetNotPaid();
+    const subscriber = firestore()
+      .collection('Users')
+      .onSnapshot(querySnapshot => {
+        querySnapshot.forEach(documentSnapshot => {
+          setNotPaid(documentSnapshot.data().notPaid);
+        });
+
+        setIsLoading(false);
+      });
+
+    return () => subscriber();
   }, []);
 
   const handleLogOutModal = () => setLogOutModal(!logOutModal);
@@ -44,10 +55,6 @@ export const Home = () => {
     return sum;
   };
 
-  const handleGetNotPaid = () => {
-    setNotPaid(fakeData);
-  };
-
   return (
     <Container>
       <Spacer height={20} />
@@ -57,12 +64,6 @@ export const Home = () => {
         photoUrl={currentUser?.photoUrl}
         handleLogOutModal={handleLogOutModal}
       />
-
-      <Modal
-        isVisible={logOutModal}
-        style={{ marginHorizontal: 0, justifyContent: 'flex-end' }}>
-        <SignOut handleLogOutModal={handleLogOutModal} />
-      </Modal>
 
       <Spacer height={40} />
 
@@ -80,15 +81,29 @@ export const Home = () => {
 
       <Spacer height={38} />
 
-      <FlatList
-        data={notPaid}
-        keyExtractor={item => item.uid}
-        renderItem={({ item }) => <PaymentSlipItem data={item} />}
-        ItemSeparatorComponent={() => <SeparatorList />}
-        showsVerticalScrollIndicator={false}
-      />
+      {isLoading ? (
+        <Loading>
+          <ActivityIndicator size='large' color={secondaryDark} />
+        </Loading>
+      ) : (
+        <FlatList
+          data={notPaid}
+          keyExtractor={item => item.uid}
+          renderItem={({ item }) => (
+            <PaymentSlipItem data={item} disableOptions={false} />
+          )}
+          ItemSeparatorComponent={() => <SeparatorList />}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
 
       <FooterList amount={handleTotalAmount()} />
+
+      <Modal
+        isVisible={logOutModal}
+        style={{ marginHorizontal: 0, justifyContent: 'flex-end' }}>
+        <SignOut handleLogOutModal={handleLogOutModal} />
+      </Modal>
     </Container>
   );
 };

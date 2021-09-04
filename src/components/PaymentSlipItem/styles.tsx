@@ -25,5 +25,5 @@ export const Title = styled.Text<TitleProps>`
 `;
 
 export const Span = styled.Text`
-  color: ${theme.colors.secondaryDark};
+  color: ${theme.colors.span};
 `;
