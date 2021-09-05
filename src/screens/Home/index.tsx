@@ -10,6 +10,7 @@ import { PaymentSlip } from '../../context/userProvider';
 
 import { Spacer } from '../../components/Spacer';
 import { FooterList } from '../../components/FooterList';
+import { PlusButton } from '../../components/PlusButton';
 import { SeparatorList } from '../../components/SeparatorList';
 import { ProfileHeader } from '../../components/ProfileHeader';
 import { PaymentSlipItem } from '../../components/PaymentSlipItem';
@@ -89,6 +90,8 @@ export const Home = () => {
           showsVerticalScrollIndicator={false}
         />
       )}
+
+      <PlusButton />
 
       <FooterList amount={handleTotalAmount()} />
     </Container>

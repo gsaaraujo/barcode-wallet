@@ -12,6 +12,8 @@ target 'barcodeWallet' do
     :hermes_enabled => false
   )
 
+  pod 'react-native-orientation', :path => '../node_modules/react-native-orientation'
+
   target 'barcodeWalletTests' do
     inherit! :complete
     # Pods for testing
