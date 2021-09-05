@@ -43,3 +43,10 @@ export const Loading = styled.View`
   align-items: center;
   justify-content: center;
 `;
+
+export const PlusButtonContent = styled.View`
+  bottom: -20px;
+  z-index: 100;
+  position: absolute;
+  align-self: center;
+`;

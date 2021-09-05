@@ -7,6 +7,7 @@ import { theme } from '../global/styles/theme';
 import { BottomTabRoutes } from './bottomTab.routes';
 
 import { CameraView } from '../screens/CameraView';
+import { AddPaymentSlip } from '../screens/AddPaymentSlip';
 
 export const AppRoutes = () => {
   const { Navigator, Screen } = createNativeStackNavigator();
@@ -25,6 +26,18 @@ export const AppRoutes = () => {
           },
           headerTintColor: primaryBlank,
           title: 'Scan the payment slip ',
+        }}
+      />
+      <Screen
+        name='AddPaymentSlip'
+        component={AddPaymentSlip}
+        options={{
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: primaryDark,
+          },
+          headerTintColor: primaryBlank,
+          title: '',
         }}
       />
     </Navigator>

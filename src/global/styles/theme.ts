@@ -15,6 +15,8 @@ export const theme = {
 
     buttonFeedBack: 'rgba(0, 0, 0, 0.27)',
     buttonFeedBackWhite: 'rgba(225, 225, 225, 0.27)',
+
+    warning: '#FF4848',
   },
 
   fonts: {

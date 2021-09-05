@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { Keyboard } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+
 import Orientation from 'react-native-orientation';
 import { RNCamera } from 'react-native-camera';
 
@@ -9,13 +11,17 @@ import { theme } from '../../global/styles/theme';
 import { Container, Title, Border, Button } from './styles';
 
 export const CameraView = () => {
-  const { primaryBlank, buttonFeedBack } = theme.colors;
+  const { buttonFeedBack } = theme.colors;
+
+  const navigation: any = useNavigation();
 
   useEffect(() => {
     Orientation.lockToLandscape();
 
     return () => Orientation.lockToPortrait();
   }, []);
+
+  const handleGoToAddPaymentSlip = () => navigation.navigate('AddPaymentSlip');
 
   return (
     <Container onPress={() => Keyboard.dismiss()}>
@@ -38,8 +44,10 @@ export const CameraView = () => {
           console.log(barcodes);
         }}
       />
-      <Border backgroundColor={primaryBlank}>
-        <Button android_ripple={{ color: buttonFeedBack }}>
+      <Border>
+        <Button
+          android_ripple={{ color: buttonFeedBack }}
+          onPress={handleGoToAddPaymentSlip}>
           <Title>Or type here to insert the code manually</Title>
         </Button>
       </Border>

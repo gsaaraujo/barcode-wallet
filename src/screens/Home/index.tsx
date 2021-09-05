@@ -15,7 +15,14 @@ import { SeparatorList } from '../../components/SeparatorList';
 import { ProfileHeader } from '../../components/ProfileHeader';
 import { PaymentSlipItem } from '../../components/PaymentSlipItem';
 
-import { Container, Title, Bold, TotalQuantity, Loading } from './styles';
+import {
+  Container,
+  Title,
+  Bold,
+  TotalQuantity,
+  Loading,
+  PlusButtonContent,
+} from './styles';
 
 export const Home = () => {
   const [notPaid, setNotPaid] = useState<PaymentSlip[]>([]);
@@ -91,7 +98,9 @@ export const Home = () => {
         />
       )}
 
-      <PlusButton />
+      <PlusButtonContent>
+        <PlusButton />
+      </PlusButtonContent>
 
       <FooterList amount={handleTotalAmount()} />
     </Container>
