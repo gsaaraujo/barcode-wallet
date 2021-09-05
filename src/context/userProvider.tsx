@@ -21,6 +21,10 @@ export type UserContextData = {
   handleAddPaymentSlipt: (newPaymentSlip: PaymentSlip) => Promise<number>;
   // eslint-disable-next-line no-unused-vars
   handleDeletePaymentSlip: (uid: string) => Promise<number>;
+  handleAlreadyPaidPaymentSlip: (
+    // eslint-disable-next-line no-unused-vars
+    newPaymentSlip: PaymentSlip,
+  ) => Promise<number>;
 };
 
 type Props = {
@@ -93,9 +97,45 @@ export const UserProvider = ({ children }: Props) => {
     }
   };
 
+  const handleAlreadyPaidPaymentSlip = async (
+    newPaymentSlip: PaymentSlip,
+  ): Promise<number> => {
+    try {
+      const userDocument = await firestore()
+        .collection('Users')
+        .doc(currentUser?.uid)
+        .get();
+
+      let resultNotPaid = userDocument.data()?.notPaid;
+      resultNotPaid = resultNotPaid.filter(
+        (each: any) => each.uid !== newPaymentSlip.uid,
+      );
+
+      await firestore().collection('Users').doc(currentUser?.uid).update({
+        notPaid: resultNotPaid,
+      });
+
+      await firestore()
+        .collection('Users')
+        .doc(currentUser?.uid)
+        .update({
+          alreadyPaid: firebase.firestore.FieldValue.arrayUnion(newPaymentSlip),
+        });
+
+      return 1;
+    } catch (error) {
+      Alert.alert('Sorry for the inconvenience', 'Please try again later');
+      return 0;
+    }
+  };
+
   return (
     <UserContext.Provider
-      value={{ handleAddPaymentSlipt, handleDeletePaymentSlip }}>
+      value={{
+        handleAddPaymentSlipt,
+        handleDeletePaymentSlip,
+        handleAlreadyPaidPaymentSlip,
+      }}>
       {children}
     </UserContext.Provider>
   );

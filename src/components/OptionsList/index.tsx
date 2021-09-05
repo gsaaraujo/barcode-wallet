@@ -34,8 +34,8 @@ export const OptionsList = ({ item, handleOptListModal }: Props) => {
     buttonFeedBackWhite,
   } = theme.colors;
 
-  const { handleDeletePaymentSlip } = useUser();
-  console.log(item.uid);
+  const { handleDeletePaymentSlip, handleAlreadyPaidPaymentSlip } = useUser();
+
   return (
     <Container>
       <Spacer height={16} />
@@ -58,7 +58,8 @@ export const OptionsList = ({ item, handleOptListModal }: Props) => {
           android_ripple={{
             color: buttonFeedBackWhite,
           }}
-          backgroundColor={primaryDark}>
+          backgroundColor={primaryDark}
+          onPress={() => handleAlreadyPaidPaymentSlip(item)}>
           <Title font={titleFont100} color={primaryBlank} size={16}>
             Yes
           </Title>
