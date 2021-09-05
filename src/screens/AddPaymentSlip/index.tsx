@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
-import { Keyboard } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Keyboard } from 'react-native';
 
 import Orientation from 'react-native-orientation';
+import { useNavigation } from '@react-navigation/native';
 
 import { useForm, Controller } from 'react-hook-form';
 
@@ -11,6 +12,8 @@ import AmountSvg from '../../assets/images/amount.svg';
 import BarcodeSvg from '../../assets/images/barcode.svg';
 import FileTextSvg from '../../assets/images/file-text-line.svg';
 import XCircleSvg from '../../assets/images/x-circle.svg';
+
+import { useUser } from '../../hooks/useUser';
 
 import { Spacer } from '../../components/Spacer';
 
@@ -24,8 +27,9 @@ import {
   InputContent,
 } from './styles';
 
-export const AddPaymentSlip = () => {
-  const { buttonFeedBack, placeholder } = theme.colors;
+export const AddPaymentSlip = ({ route }: any) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const { primaryDark, buttonFeedBack, placeholder } = theme.colors;
 
   const {
     control,
@@ -33,11 +37,24 @@ export const AddPaymentSlip = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data: any) => console.log(data);
+  const { handleAddPaymentSlipt } = useUser();
+  const navigation: any = useNavigation();
+
+  const code = route.params.codebar;
 
   useEffect(() => {
     Orientation.lockToPortrait();
   }, []);
+
+  const onSubmit = async (data: any) => {
+    setIsLoading(true);
+    data.value = Number(data.value);
+
+    await handleAddPaymentSlipt(data);
+    setIsLoading(false);
+
+    navigation.navigate('Home');
+  };
 
   return (
     <Container onPress={() => Keyboard.dismiss()}>
@@ -61,6 +78,7 @@ export const AddPaymentSlip = () => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                multiline
               />
             </InputContent>
           )}
@@ -73,6 +91,7 @@ export const AddPaymentSlip = () => {
           control={control}
           rules={{
             required: true,
+            maxLength: 8,
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <InputContent>
@@ -82,6 +101,7 @@ export const AddPaymentSlip = () => {
                 placeholderTextColor={placeholder}
                 onBlur={onBlur}
                 onChangeText={onChange}
+                keyboardType='numeric'
                 value={value}
               />
             </InputContent>
@@ -95,20 +115,22 @@ export const AddPaymentSlip = () => {
           control={control}
           rules={{
             required: true,
+            maxLength: 10,
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <InputContent>
               <AmountSvg />
               <Input
-                placeholder='Amount'
+                placeholder='Value'
                 placeholderTextColor={placeholder}
                 onBlur={onBlur}
                 onChangeText={onChange}
+                keyboardType='numeric'
                 value={value}
               />
             </InputContent>
           )}
-          name='amount'
+          name='value'
           defaultValue=''
         />
         {errors.amount && <ErrorMessage>This is required.</ErrorMessage>}
@@ -127,19 +149,26 @@ export const AddPaymentSlip = () => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                keyboardType='numeric'
+                style={{ paddingRight: 20 }}
               />
             </InputContent>
           )}
           name='barcode'
-          defaultValue=''
+          defaultValue={code || ''}
         />
         {errors.barcode && <ErrorMessage>This is required.</ErrorMessage>}
       </Content>
 
       <Button
         android_ripple={{ color: buttonFeedBack }}
+        disabled={isLoading}
         onPress={handleSubmit(onSubmit)}>
-        <Title size={16}>Register</Title>
+        {isLoading ? (
+          <ActivityIndicator size='large' color={primaryDark} />
+        ) : (
+          <Title size={16}>Register</Title>
+        )}
       </Button>
     </Container>
   );

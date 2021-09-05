@@ -32,7 +32,7 @@ export const Button = styled.Pressable`
   background-color: ${theme.colors.secondaryDark};
 `;
 
-export const InputContent = styled.View`
+export const InputContent = styled.Pressable`
   flex-direction: row;
   align-items: center;
 `;

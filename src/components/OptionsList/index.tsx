@@ -4,6 +4,9 @@ import { theme } from '../../global/styles/theme';
 
 import ExitSvg from '../../assets/images/x-square.svg';
 
+import { useUser } from '../../hooks/useUser';
+import { PaymentSlip } from '../../context/userProvider';
+
 import { Spacer } from '../Spacer';
 
 import {
@@ -14,7 +17,6 @@ import {
   ButtonContent,
   Button,
 } from './styles';
-import { PaymentSlip } from '../../context/userProvider';
 
 type Props = {
   item: PaymentSlip;
@@ -32,6 +34,8 @@ export const OptionsList = ({ item, handleOptListModal }: Props) => {
     buttonFeedBackWhite,
   } = theme.colors;
 
+  const { handleDeletePaymentSlip } = useUser();
+  console.log(item.uid);
   return (
     <Container>
       <Spacer height={16} />
@@ -81,7 +85,8 @@ export const OptionsList = ({ item, handleOptListModal }: Props) => {
           color: buttonFeedBackWhite,
         }}
         backgroundColor={primaryDark}
-        style={{ width: 165 }}>
+        style={{ width: 165 }}
+        onPress={() => handleDeletePaymentSlip(item.uid)}>
         <Title font={titleFont100} color={primaryBlank} size={16}>
           Delete payment
         </Title>

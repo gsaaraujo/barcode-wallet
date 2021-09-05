@@ -21,7 +21,8 @@ export const CameraView = () => {
     return () => Orientation.lockToPortrait();
   }, []);
 
-  const handleGoToAddPaymentSlip = () => navigation.navigate('AddPaymentSlip');
+  const handleGoToAddPaymentSlip = (code: string) =>
+    navigation.navigate('AddPaymentSlip', { codebar: code });
 
   return (
     <Container onPress={() => Keyboard.dismiss()}>
@@ -41,13 +42,15 @@ export const CameraView = () => {
           buttonNegative: 'Cancel',
         }}
         onGoogleVisionBarcodesDetected={({ barcodes }) => {
-          console.log(barcodes);
+          if (barcodes.length !== 0) {
+            handleGoToAddPaymentSlip(barcodes[0].data);
+          }
         }}
       />
       <Border>
         <Button
           android_ripple={{ color: buttonFeedBack }}
-          onPress={handleGoToAddPaymentSlip}>
+          onPress={() => handleGoToAddPaymentSlip('')}>
           <Title>Or type here to insert the code manually</Title>
         </Button>
       </Border>
