@@ -63,3 +63,5 @@ google-services.json
 
 # Env
 .env
+
+*.hprof
