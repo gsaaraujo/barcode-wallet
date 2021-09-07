@@ -5,6 +5,7 @@ import { theme } from '../../global/styles/theme';
 import ExitSvg from '../../assets/images/x-square.svg';
 
 import { Spacer } from '../Spacer';
+import { useAuth } from '../../hooks/useAuth';
 
 import { Container, Title, IconWrapper, ButtonContent, Button } from './styles';
 
@@ -22,6 +23,8 @@ export const SignOut = ({ handleLogOutModal }: Props) => {
     buttonFeedBack,
     buttonFeedBackWhite,
   } = theme.colors;
+
+  const {handleSignOut} = useAuth();
 
   return (
     <Container>
@@ -44,7 +47,9 @@ export const SignOut = ({ handleLogOutModal }: Props) => {
           android_ripple={{
             color: buttonFeedBackWhite,
           }}
-          backgroundColor={primaryDark}>
+          backgroundColor={primaryDark}
+          onPress={handleSignOut}
+        >
           <Title font={titleFont100} color={primaryBlank} size={16}>
             Yes
           </Title>

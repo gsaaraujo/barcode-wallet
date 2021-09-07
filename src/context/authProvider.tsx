@@ -14,6 +14,7 @@ type User = {
 type AuthContextData = {
   currentUser: User | null;
   handleGoogleSignIn: () => Promise<number>;
+  handleSignOut: () => void;
 };
 
 type Props = {
@@ -63,8 +64,18 @@ export const AuthProvider = ({ children }: Props) => {
     }
   };
 
+  const handleSignOut = () => {
+    try {
+      auth().signOut();
+    } catch (error) {
+      console.log(error);
+    }finally {
+      setCurrentUser(null);
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ currentUser, handleGoogleSignIn }}>
+    <AuthContext.Provider value={{ currentUser, handleGoogleSignIn, handleSignOut }}>
       {children}
     </AuthContext.Provider>
   );

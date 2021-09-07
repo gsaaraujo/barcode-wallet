@@ -4,6 +4,7 @@ import { Alert } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { firebase } from '@react-native-firebase/auth';
 
+
 import uuid from 'react-native-uuid';
 
 import { useAuth } from '../hooks/useAuth';
@@ -36,6 +37,7 @@ export const UserContext = createContext<UserContextData>(
 );
 
 export const UserProvider = ({ children }: Props) => {
+
   const { currentUser } = useAuth();
 
   useEffect(() => {
@@ -128,6 +130,8 @@ export const UserProvider = ({ children }: Props) => {
       return 0;
     }
   };
+
+  
 
   return (
     <UserContext.Provider
