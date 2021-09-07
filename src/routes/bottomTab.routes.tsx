@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -9,18 +10,26 @@ import { theme } from '../global/styles/theme';
 
 import { Home } from '../screens/Home';
 import { History } from '../screens/History';
+import { PlusButton } from '../components/PlusButton';
 
 export const BottomTabRoutes = () => {
   const { Navigator, Screen } = createBottomTabNavigator();
   const { secondaryDark, primaryBlank, background } = theme.colors;
 
   return (
-    <Navigator
+    <>
+      <View style={{position: 'absolute', bottom: 20, zIndex: 100, alignSelf: 'center'}}>
+        <PlusButton />
+      </View>
+      <Navigator
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
           backgroundColor: background,
+          borderTopWidth: 0,
+          elevation: 0
         },
+        
       }}>
       <Screen
         name='Home'
@@ -43,5 +52,6 @@ export const BottomTabRoutes = () => {
         }}
       />
     </Navigator>
+    </>
   );
 };

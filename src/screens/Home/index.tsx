@@ -10,7 +10,6 @@ import { PaymentSlip } from '../../context/userProvider';
 
 import { Spacer } from '../../components/Spacer';
 import { FooterList } from '../../components/FooterList';
-import { PlusButton } from '../../components/PlusButton';
 import { SeparatorList } from '../../components/SeparatorList';
 import { ProfileHeader } from '../../components/ProfileHeader';
 import { PaymentSlipItem } from '../../components/PaymentSlipItem';
@@ -21,7 +20,6 @@ import {
   Bold,
   TotalQuantity,
   Loading,
-  PlusButtonContent,
 } from './styles';
 
 export const Home = () => {
@@ -97,10 +95,6 @@ export const Home = () => {
           showsVerticalScrollIndicator={false}
         />
       )}
-
-      <PlusButtonContent>
-        <PlusButton />
-      </PlusButtonContent>
 
       <FooterList amount={handleTotalAmount()} />
     </Container>

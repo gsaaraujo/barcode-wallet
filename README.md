@@ -30,6 +30,7 @@ Barcode Wallet is app where you can scan and store your barcode payment slips. I
 - [ ] React Native CLI
 - [ ] TypeScript
 - [ ] Firebase Social Authentication with Google
+- [ ] Cloud Firestore
 - [ ] ML Kit
 - [ ] Cloud Firestore
 - [ ] Context API
